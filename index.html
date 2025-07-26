@@ -1,0 +1,59 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de Troco</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar com botão do drawer -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Troco Rápido</a>
+      <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#drawer" aria-controls="drawer">
+        Caixa
+      </button>
+    </div>
+  </nav>
+
+  <!-- Conteúdo principal -->
+  <div class="container my-4">
+    <div id="alert-config" class="alert alert-warning d-none">
+      Caixa não configurado! <a href="config.html" class="alert-link">Clique aqui para configurar</a>.
+    </div>
+
+    <form id="form-troco">
+      <div class="mb-3">
+        <label for="compra" class="form-label">Valor da Compra (R$)</label>
+        <input type="number" step="0.01" class="form-control" id="compra" required>
+      </div>
+      <div class="mb-3">
+        <label for="entregue" class="form-label">Valor Entregue (R$)</label>
+        <input type="number" step="0.01" class="form-control" id="entregue" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Calcular Troco</button>
+    </form>
+
+    <div id="resultado" class="mt-4"></div>
+  </div>
+
+  <!-- Drawer Offcanvas -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="drawer" aria-labelledby="drawerLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="drawerLabel">Caixa Atual</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div id="lista-caixa" class="row g-3"></div>
+      <hr>
+      <p><strong>Total em Caixa:</strong> R$ <span id="total-caixa">0.00</span></p>
+      <a href="config.html" class="btn btn-secondary">Editar Quantidades</a>
+    </div>
+  </div>
+
+</body>
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>
