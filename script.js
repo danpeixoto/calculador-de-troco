@@ -7,6 +7,21 @@ function calcularTroco(compra, entregue) {
   let troco = entregue - compra;
   const caixa = carregarCaixa();
   const breakdown = [];
+
+  // Soma o total disponível apenas das notas/moedas <= troco
+  const totalDisponivel = caixa
+    .filter((d) => d.value <= troco)
+    .reduce((acc, d) => acc + d.value * d.qty, 0);
+
+  if (totalDisponivel < troco) {
+    // Não é possível dar o troco com as notas/moedas disponíveis
+    return {
+      breakdown: [],
+      trocoRestante: troco,
+      caixaAtualizado: caixa,
+    };
+  }
+
   caixa
     .sort((a, b) => b.value - a.value)
     .forEach((d) => {
@@ -18,8 +33,7 @@ function calcularTroco(compra, entregue) {
         d.qty -= take;
       }
     });
-  console.log('Caixa 1:', caixa);
-  console.log('caixa original:', carregarCaixa());
+
   return { breakdown, trocoRestante: troco, caixaAtualizado: caixa };
 }
 
@@ -143,11 +157,10 @@ document.getElementById('form-troco').addEventListener('submit', (e) => {
     compra,
     entregue,
   );
-  console.log({ breakdown, trocoRestante, caixaAtualizado });
-  renderDrawer();
   exibirResultadoTroco(breakdown, trocoRestante);
   if (trocoRestante === 0) {
     salvarCaixa(caixaAtualizado);
+    renderDrawer();
   }
 });
 
