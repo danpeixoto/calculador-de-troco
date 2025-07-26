@@ -18,6 +18,8 @@ function calcularTroco(compra, entregue) {
         d.qty -= take;
       }
     });
+  console.log('Caixa 1:', caixa);
+  console.log('caixa original:', carregarCaixa());
   return { breakdown, trocoRestante: troco, caixaAtualizado: caixa };
 }
 
@@ -28,8 +30,7 @@ function exibirResultadoTroco(breakdown, trocoRestante) {
     html += `<div class="alert alert-danger">Caixa não tem troco suficiente para devolver R$ ${(
       trocoRestante / 100
     ).toFixed(2)}</div>`;
-  }
-  if (breakdown.length === 0) {
+  } else if (breakdown.length === 0) {
     html += '<p>Sem troco a devolver.</p>';
   } else {
     html += '<h5>Troco:</h5><div class="row g-3">';
@@ -37,7 +38,8 @@ function exibirResultadoTroco(breakdown, trocoRestante) {
       const val = (d.value / 100).toFixed(2);
       html += `
               <div class='col-4 text-center'>
-                <img src="images/${d.value}.png" alt="R$${val}" width="50"><br>
+                <strong>R$${val}</strong><br>
+                <img src="images/${d.value}.png" alt="R$${val}" width="200"><br>
                 <strong>x ${d.qty}</strong>
               </div>`;
     });
@@ -141,9 +143,21 @@ document.getElementById('form-troco').addEventListener('submit', (e) => {
     compra,
     entregue,
   );
-  salvarCaixa(caixaAtualizado);
+  console.log({ breakdown, trocoRestante, caixaAtualizado });
   renderDrawer();
   exibirResultadoTroco(breakdown, trocoRestante);
+  if (trocoRestante === 0) {
+    salvarCaixa(caixaAtualizado);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', renderDrawer);
+// Corrige o bug do backdrop do drawer que não desaparece ao fechar clicando fora
+document
+  .getElementById('drawer')
+  ?.addEventListener('hidden.bs.offcanvas', function () {
+    document
+      .querySelectorAll('.offcanvas-backdrop')
+      .forEach((el) => el.remove());
+    document.body.classList.remove('offcanvas-backdrop');
+  });
